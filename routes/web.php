@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\DashboardController; //controllers file in app folder
+use App\Http\Controllers\HomeController; //controllers file in app folder
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::get('dashboard', [DashboardController::class, 'index'])
+Auth::routes();
+
+Route::get('home', [HomeController::class, 'GraphPage'])
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('home');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-
-
-
-require __DIR__.'/auth.php';
+// Separate API routes for real-time updates
+Route::get('/chart-data', [HomeController::class, 'getChartData']);
+Route::get('/PHchart', [HomeController::class, 'getPHData']);
